@@ -1,0 +1,43 @@
+{% extends "index.html" %}
+{% block content %}
+
+<h2>Overall Results</h2>
+
+<!-- code to display list of courses-->
+<table class="table">
+    <tr>
+        <th>Driver ID</th>
+        <th>Driver Name</th>
+        <th>Car Model</th>
+        <th>Course A</th>
+        <th>Course B</th>
+        <th>Course C</th>
+        <th>Course D</th>
+        <th>Course E</th>
+        <th>Course F</th>
+        <th>Overall Result</th>
+        <th>Reward</th>
+    </tr>
+    {% for overall_result in overall_results %}
+    <tr>
+        <td>{{ overall_result[0] }}</td>
+        <td>{{ overall_result[1] }}</td>
+        <td>{{ overall_result[2] }}</td>
+        <td>{{ overall_result[3] }}</td>
+        <td>{{ overall_result[4] }}</td>
+        <td>{{ overall_result[5] }}</td>
+        <td>{{ overall_result[6] }}</td>
+        <td>{{ overall_result[7] }}</td>
+        <td>{{ overall_result[8] }}</td>
+        <td>{% if overall_result[9] == "NQ" %}
+            NQ
+            {% else %}
+            {{ '%0.2f' | format(overall_result[9]|float) }}
+            {% endif %}
+        </td>
+        <td>{{ overall_result[10] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,5 @@
+user = "root"
+password = "123"
+host = "localhost"
+port = "33060"
+name = "motorkhana"
