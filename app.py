@@ -3,6 +3,7 @@ import os
 from flask import Flask, session, redirect, url_for, jsonify, render_template, request, Blueprint
 
 from api_guide import guide_api
+from api_profile import profile_api
 from api_register import register_api
 from database import *
 from utils import check_password
@@ -14,6 +15,7 @@ app = Flask(__name__,
 app.secret_key = 'your_secret_key'
 app.register_blueprint(register_api)
 app.register_blueprint(guide_api, url_prefix='/guide')
+app.register_blueprint(profile_api, url_prefix='/profile', static_url_path="/profile", static_folder="static")
 static_blueprint = Blueprint('static', __name__, static_url_path='/uploads', static_folder='uploads')
 app.register_blueprint(static_blueprint)
 
