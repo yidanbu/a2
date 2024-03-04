@@ -1,4 +1,4 @@
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
+document.getElementById('loginForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     // 获取用户输入的邮箱和密码
     var username = document.getElementById('username').value;

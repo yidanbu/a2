@@ -9,8 +9,13 @@
 </head>
 
 <body>
-    <h1>Welcome to the Main Page</h1>
-    <p>If you see this page, it means you are logged in.</p>
+<h1>Welcome to the Main Page</h1>
+<p>If you see this page, it means you are logged in.</p>
+<li><a href="{{ url_for('login') }}" id="login-link">Login</a></li>
+<li><a href="{{ url_for('register_api.register') }}" id="register-link">Register</a></li>
+<li><a href="{{ url_for('logout') }}" id="logout-link">Logout</a></li>
+<script src="js/me.js"></script>
+<div id="user-info">Loading user info...</div>
 {#    <script>#}
 {#        // 简单示例：使用localStorage模拟登录状态检查#}
 {#        if (!localStorage.getItem("isLoggedIn")) {#}

@@ -47,7 +47,7 @@ def listdrivers():
 def listcourses():
     course_list = query("SELECT * FROM course;")
     if app.debug: print(f"course_list: {course_list}")
-    return render_template("courselist.html", course_list=course_list)
+    return render_template("guide.html", course_list=course_list)
 
 
 @app.route("/driverrundetails")

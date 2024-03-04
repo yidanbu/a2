@@ -1,33 +1,31 @@
-import mysql.connector
-from flask import Flask, session, redirect, url_for
-from flask import render_template
-from flask import request
+import os
 
-import config
+from flask import Flask, session, redirect, url_for, jsonify, render_template, request, Blueprint
+
+from api_guide import guide_api
+from api_register import register_api
+from database import *
+from utils import check_password
 
 app = Flask(__name__,
             static_url_path='',
             static_folder='static',
             template_folder='templates')
 app.secret_key = 'your_secret_key'
-connection = None
+app.register_blueprint(register_api)
+app.register_blueprint(guide_api, url_prefix='/guide')
+static_blueprint = Blueprint('static', __name__, static_url_path='/uploads', static_folder='uploads')
+app.register_blueprint(static_blueprint)
+
+# ensure upload folder exists
+os.makedirs(config.upload_folder, exist_ok=True)
 
 
-def get_cursor():
-    global connection
-    connection = mysql.connector.connect(user=config.user,
-                                         password=config.password,
-                                         host=config.host,
-                                         port=config.port,
-                                         database=config.name,
-                                         autocommit=True)
-    return connection.cursor()
-
-
-def query(stmt, params=None):
-    cursor = get_cursor()
-    cursor.execute(stmt, params)
-    return cursor.fetchall()
+@app.route("/me")
+def me():
+    if 'username' not in session:
+        return jsonify({"username": None}), 401
+    return jsonify({"username": session["username"]}), 200
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -35,13 +33,16 @@ def login():
     if request.method == 'POST':
         username = request.json['username']
         password = request.json['password']
-        # hashed_password =users.get(email)
-        # if hashed_password and check_password_hash(hashed_password, password):
-        #     session['user_id'] = email  # 用户登录状态，存储在session中
-        #     return redirect(url_for('index'))
-        # else:
-        #     return 'Login Failed'
-        session['user_id'] = username
+        print(username)
+        result = query("select * from user where username=%s;", (username, ))
+        if not result:
+            return {"success": False}, 403
+        # compare password
+        print(result[0]['password'], password)
+        if not check_password(result[0]['password'], password):
+            return {"success": False}, 403
+        session['username'] = username
+        session['role'] = result[0]['role']
         return {"success": True}, 200
     return render_template('login.html')
 
@@ -49,14 +50,14 @@ def login():
 @app.route('/')
 @app.route("/index")
 def index():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
+    # if 'user_id' not in session:
+    #     return redirect(url_for('login'))
     return render_template('index.html')
 
 
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)  # 移除用户登录状态
+    session.pop('username', None)  # 移除用户登录状态
     return redirect(url_for('login'))
 
 

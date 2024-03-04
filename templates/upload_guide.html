@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Disease Information</title>
+</head>
+<body>
+<h2>Upload Disease Information</h2>
+<form id="diseaseForm" method="post" enctype="multipart/form-data" action={{ url_for("guide_api.upload_guide") }}>
+    <label>Disease Type:
+        <input type="radio" name="type" value="pest"/>Pest
+        <input type="radio" name="type" value="disease"/>Disease
+    </label><br>
+    <label>Exists in NZ:
+        <input type="radio" name="exists_in_nz" value="true"/>Yes
+        <input type="radio" name="exists_in_nz" value="false"/>No
+    </label><br>
+    <label>Common Name: <input type="text" name="common_name"></label><br>
+    <label>Scientific Name: <input type="text" name="scientific_name"></label><br>
+    <label>Key Characteristics: <textarea name="key_characteristics"></textarea></label><br>
+    <label>Description: <textarea name="description"></textarea></label><br>
+    <label>Symptoms: <textarea name="symptoms"></textarea></label><br>
+    <label>Images: <input type="file" name="images[]" multiple onchange="updateImageList()"></label><br>
+    <div id="imageList"></div> <!-- 用于显示图片列表和单选按钮 -->
+    <button type="submit">Submit</button>
+</form>
+<script>
+        function updateImageList() {
+            const input = document.querySelector('input[type="file"]');
+            const imageList = document.getElementById('imageList');
+            imageList.innerHTML = ''; // 清空当前列表
+
+            for (let i = 0; i < input.files.length; i++) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    // 当文件被读取时，显示一个预览、文件名和单选按钮
+                    imageList.innerHTML += `
+                        <div>
+                            <label>
+                                <input type="radio" name="primary_image" value="${i}">
+                                <img src="${e.target.result}" alt="Image preview" style="width: 400px; height: auto;">
+                            </label>
+                            ${input.files[i].name}<br>
+                        </div>
+                    `;
+                };
+
+                reader.readAsDataURL(input.files[i]);
+            }
+        }
+    </script>
+</body>
+</html>
