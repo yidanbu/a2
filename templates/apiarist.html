@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Apiarists</h2>
+    <a class="btn btn-success"
+       href="/register"
+       role="button">New Guide</a>
+    <br><br>
+    <table class="table table-bordered border-primary">
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Date Joined</th>
+            <th>Status</th>
+            {% if user['role'] == 'admin' %}
+                <th>Actions</th>
+            {% endif %}
+        </tr>
+        {% for apiarist in apiarist_list %}
+            <tr>
+                <td>{{ apiarist["id"] }}</td>
+                <td>{{ apiarist["first_name"] }}</td>
+                <td>{{ apiarist["last_name"] }}</td>
+                <td>{{ apiarist["address"] }}</td>
+                <td>{{ apiarist["email"] }}</td>
+                <td>{{ apiarist["phone"] }}</td>
+                <td>{{ apiarist["date_hired_or_joined"] }}</td>
+                <td>{{ apiarist["status"] }}</td>
+                {% if user['role'] == 'admin' %}
+                    <td>
+                        <a class="btn btn-primary"
+                           href="{{ url_for('apiarist_api.apiarist_detail_page', id=apiarist['id']) }}"
+                           role="button">Edit</a>
+                        <button class="btn btn-danger apiarist-delete" value="{{ apiarist['id'] }}">Delete</button>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+    <script src="/js/apiarist.js"></script>
+
+{% endblock %}

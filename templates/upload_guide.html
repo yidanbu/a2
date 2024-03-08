@@ -25,17 +25,17 @@
     <button type="submit">Submit</button>
 </form>
 <script>
-        function updateImageList() {
-            const input = document.querySelector('input[type="file"]');
-            const imageList = document.getElementById('imageList');
-            imageList.innerHTML = ''; // 清空当前列表
+    function updateImageList() {
+        const input = document.querySelector('input[type="file"]');
+        const imageList = document.getElementById('imageList');
+        imageList.innerHTML = ''; // 清空当前列表
 
-            for (let i = 0; i < input.files.length; i++) {
-                const reader = new FileReader();
+        for (let i = 0; i < input.files.length; i++) {
+            const reader = new FileReader();
 
-                reader.onload = function(e) {
-                    // 当文件被读取时，显示一个预览、文件名和单选按钮
-                    imageList.innerHTML += `
+            reader.onload = function (e) {
+                // 当文件被读取时，显示一个预览、文件名和单选按钮
+                imageList.innerHTML += `
                         <div>
                             <label>
                                 <input type="radio" name="primary_image" value="${i}">
@@ -44,11 +44,11 @@
                             ${input.files[i].name}<br>
                         </div>
                     `;
-                };
+            };
 
-                reader.readAsDataURL(input.files[i]);
-            }
+            reader.readAsDataURL(input.files[i]);
         }
-    </script>
+    }
+</script>
 </body>
 </html>

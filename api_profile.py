@@ -1,19 +1,13 @@
-import datetime
-import os
-
 from flask import Blueprint, request, jsonify, render_template, session
-from werkzeug.utils import secure_filename
-import uuid
 
-import config
 from database import *
-from utils import hash_password, role_required
+from utils import hash_password
 
 profile_api = Blueprint('profile_api', __name__)
 
 
 @profile_api.route("/", methods=['GET'])
-def get_profile():
+def profile_page():
     if 'username' not in session:
         return jsonify({"username": None}), 401
     result = query("select * from user where username=%s;", (session['username'],))

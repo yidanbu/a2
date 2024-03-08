@@ -6,9 +6,11 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     var confirmPassword = document.getElementById('confirmPassword').value;
     var first_name = document.getElementById('first_name').value;
     var last_name = document.getElementById('last_name').value;
-    var address = document.getElementById('address').value;
     var email = document.getElementById('email').value;
     var phone = document.getElementById('phone').value;
+    var position = document.getElementById('position').value;
+    var department = document.getElementById('department').value;
+    var role = document.querySelector('input[name="role"]:checked').value;
 
     // check if the password and confirmPassword match
     if (password !== confirmPassword) {
@@ -55,14 +57,16 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         password: password,
         first_name: first_name,
         last_name: last_name,
-        address: address,
         email: email,
-        phone: phone
+        phone: phone,
+        position: position,
+        department: department,
+        role: role
     };
 
     // 发送POST请求到Flask后端
     try {
-        const response = await fetch('/register', {
+        const response = await fetch('', {
             method: 'POST', // 或者 'GET' 如果你的后端是以查询字符串方式接收
             headers: {
                 'Content-Type': 'application/json',

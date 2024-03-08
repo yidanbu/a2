@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+        {% if user['role'] == 'apiarist' %}
+            <h2>Guide detail</h2>
+        {% else %}
+            <h2>Edit Guide</h2>
+        {% endif %}
+        <form id="edit-guide-form">
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input type="text" class="form-control" id="id" name="id" value="{{ guide['id'] }}" disabled="disabled"
+                       required>
+            </div>
+            <br>
+            <div class="form-group">
+                Pest or Disease:
+                <input class="form-check-input" type="radio" name="type" id="type-pest" value="pest"
+                       {% if guide['type']=='pest' %}checked{% endif %}
+                       {% if user['role'] == 'apiarist' %}disabled{% endif %}>
+                <label class="form-check-label" for="type-pest">
+                    Pest
+                </label>
+                <input class="form-check-input" type="radio" name="type" id="type-disease" value="disease"
+                       {% if guide['type']!='pest' %}checked{% endif %}
+                       {% if user['role'] == 'apiarist' %}disabled{% endif %}>
+                <label class="form-check-label" for="type-disease">
+                    Disease
+                </label>
+            </div>
+            <br>
+            <div class="form-group"> Exists in NZ:
+                <input class="form-check-input" type="radio" name="exists-in-nz" id="exists-in-nz-yes" value="1"
+                       {% if guide['exists_in_nz'] %}checked{% endif %}
+                       {% if user['role'] == 'apiarist' %}disabled{% endif %}>
+                <label class="form-check-label" for="exists-in-nz-yes">
+                    Yes
+                </label>
+                <input class="form-check-input" type="radio" name="exists-in-nz" id="exists-in-nz-no" value="0"
+                       {% if not guide['exists_in_nz'] %}checked{% endif %}
+                       {% if user['role'] == 'apiarist' %}disabled{% endif %}>
+                <label class="form-check-label" for="exists-in-nz-no">
+                    No
+                </label>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="common-name">Common name</label>
+                <input type="text" class="form-control" id="common-name" name="common-name"
+                       value="{{ guide['common_name'] }}"
+                       required {% if user['role'] == 'apiarist' %}disabled{% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="scientific-name">Scientific name</label>
+                <input type="text" class="form-control" id="scientific-name" name="scientific-name"
+                       value="{{ guide['scientific_name'] }}"
+                       required {% if user['role'] == 'apiarist' %}disabled{% endif %}>
+            </div>
+            <div class="form-group">
+                <label for="key-characteristics">Key characteristics</label>
+                <textarea class="form-control" id="key-characteristics" name="key-characteristics"
+                          required
+                          {% if user['role'] == 'apiarist' %}disabled{% endif %}>{{ guide['key_characteristics'] }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" name="description"
+                          required
+                          {% if user['role'] == 'apiarist' %}disabled{% endif %}>{{ guide['description'] }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="symptoms">Symptoms</label>
+                <textarea class="form-control" id="symptoms" name="symptoms"
+                          required
+                          {% if user['role'] == 'apiarist' %}disabled{% endif %}>{{ guide['symptoms'] }}</textarea>
+            </div>
+            {% if user['role'] != 'apiarist' %}
+                <button type="submit" class="btn btn-primary">Update Basic Info</button>
+            {% endif %}
+            <h4>Images</h4>
+            {% for image in images %}
+                <div class="row align-items-center mb-3">
+                    <div class="col-md-8">
+                        <img src="/uploads/{{ image.filename }}" class="img-fluid" alt="Image 1">
+                    </div>
+                    {% if user['role'] != 'apiarist' %}
+                        <div class="col-md-4">
+                        {% if image['is_primary'] %}
+                            <button class="btn btn-primary me-2 image-action"
+                                    name="image-{{ image.id }}-setprimary" disabled>Primary image
+                            </button>
+                            <span class="d-inline-block" tabindex="0" data-bs-toggle="popover"
+                                  data-bs-trigger="hover focus" data-bs-content="Cannot delete primary image">
+                            <button class="btn btn-danger image-action"
+                                    name="image-{{ image.id }}-delete" disabled>Delete
+                            </button>
+                            </span>
+                        {% else %}
+                            <button class="btn btn-primary me-2 image-action"
+                                    name="image-{{ image.id }}-setprimary">Set to Primary
+                            </button>
+                            <button class="btn btn-danger image-action"
+                                    name="image-{{ image.id }}-delete">Delete
+                            </button>
+
+                        {% endif %}
+                    {% endif %}
+
+                    </div>
+                </div>
+            {% endfor %}
+
+            {% if user['role'] != 'apiarist' %}
+                <div class="container mt-5">
+                    <h2>Upload Image</h2>
+                    <form id="uploadForm">
+                        <div class="mb-3">
+                            <input class="form-control" type="file" id="imageInput" name="image" accept="image/*">
+                        </div>
+                        <button type="button" class="btn btn-primary" id="uploadBtn">Upload</button>
+                    </form>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+    <script src="/js/edit_guide.js"></script>
+{% endblock %}

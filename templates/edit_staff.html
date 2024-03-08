@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2>Edit Apiarist Profile</h2>
+        <form id="edit-staff-form">
+            <div class="form-group">
+                <label for="id">ID</label>
+                <input type="text" class="form-control" id="id" name="id" value="{{ user['id'] }}"
+                       disabled="disabled"
+                       required>
+            </div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ user['username'] }}"
+                       disabled="disabled"
+                       required>
+            </div>
+            <div class="form-group">
+                <label for="first-name">First Name</label>
+                <input type="text" class="form-control" id="first-name" name="first-name"
+                       value="{{ user['first_name'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="last-name">Last Name</label>
+                <input type="text" class="form-control" id="last-name" name="last-name"
+                       value="{{ user['last_name'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" name="email"
+                       value="{{ user['email'] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="text" class="form-control" id="phone" name="phone"
+                       value="{{ user['phone'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="date-joined">Date Hired</label>
+                <input type="text" class="form-control" id="date-hired" name="date-hired"
+                       value="{{ user['date_hired_or_joined'] }}" required disabled>
+            </div>
+            <div class="form-group">
+                <label for="position">Position</label>
+                <input type="text" class="form-control" id="position" name="position"
+                       value="{{ user['position'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="department">Department</label>
+                <input type="text" class="form-control" id="department" name="department"
+                       value="{{ user['department'] }}" required>
+            </div>
+            <br>
+            <div class="form-group">
+                Status:
+                <input class="form-check-input" type="radio" name="status" id="status-active" value="active"
+                       {% if user['status'] == 'active' %}checked{% endif %}>
+                <label class="form-check-label" for="status-active">
+                    Active
+                </label>
+                <input class="form-check-input" type="radio" name="status" id="status-inactive" value="inactive"
+                       {% if user['status'] == 'inactive' %}checked{% endif %}>
+                <label class="form-check-label" for="status-inactive">
+                    Inactive
+                </label>
+            </div>
+            <br>
+            <div class="form-group">
+                Role:
+                <input class="form-check-input" type="radio" name="role" id="role-starr" value="starr"
+                       {% if user['role'] == 'staff' %}checked{% endif %}>
+                <label class="form-check-label" for="role-starr">
+                    Staff
+                </label>
+                <input class="form-check-input" type="radio" name="role" id="role-admin" value="admin"
+                       {% if user['role'] == 'admin' %}checked{% endif %}>
+                <label class="form-check-label" for="role-admin">
+                    Admin
+                </label>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+    <script src="/js/edit_staff.js"></script>
+{% endblock %}

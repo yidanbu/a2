@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-
     <form id="registerForm" method="post">
         <div class="container mt-5">
             <div class="row justify-content-center">
@@ -39,12 +38,29 @@
                                     <input type="text" class="form-control" id="last_name">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="address" class="form-label">Address</label>
-                                    <input type="text" class="form-control" id="address">
-                                </div>
-                                <div class="mb-3">
                                     <label for="phone" class="form-label">Phone</label>
                                     <input type="text" class="form-control" id="phone">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="position" class="form-label">Position</label>
+                                    <input type="text" class="form-control" id="position">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="department" class="form-label">Department</label>
+                                    <input type="text" class="form-control" id="department">
+                                </div>
+                                <div class="form-group">
+                                    Role:
+                                    <input class="form-check-input" type="radio" name="role" id="role-staff"
+                                           value="staff">
+                                    <label class="form-check-label" for="role-staff">
+                                        Staff
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="role" id="role-admin"
+                                           value="admin">
+                                    <label class="form-check-label" for="role-admin">
+                                        admin
+                                    </label>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Register</button>
                             </form>
@@ -54,6 +70,6 @@
             </div>
         </div>
     </form>
-    <script src="/js/register.js"></script>
+    <script src="/js/register_staff.js"></script>
 
 {% endblock %}
