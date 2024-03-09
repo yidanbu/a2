@@ -1,7 +1,7 @@
 import os
 import uuid
 
-from flask import Blueprint, request, jsonify, render_template, session
+from flask import Blueprint, request, jsonify, render_template, session, redirect, url_for
 from werkzeug.utils import secure_filename
 
 from database import *
@@ -22,7 +22,7 @@ def guide():
 @guide_api.route("/upload", methods=['GET'])
 @role_required('staff', 'admin')
 def upload_guide_page():
-    return render_template('upload_guide.html')
+    return render_template('upload_guide.html', user=session)
 
 
 @guide_api.route("/<id>", methods=['GET'])
@@ -49,7 +49,7 @@ def delete_guide(id):
 def upload_guide():
     disease_info = {
         'type': request.form['type'],
-        'exists_in_nz': bool(request.form['exists_in_nz']),
+        'exists_in_nz': True if request.form['exists_in_nz'] == 'yes' else False,
         'common_name': request.form['common_name'],
         'scientific_name': request.form['scientific_name'],
         'key_characteristics': request.form['key_characteristics'],
@@ -57,9 +57,9 @@ def upload_guide():
         'symptoms': request.form['symptoms']
     }
     print(request.form)  # 实际应用中应保存到数据库
-
     # 图片文件
     uploaded_files = request.files.getlist('images[]')
+    print(uploaded_files)
     filenames = []
     for index, file in enumerate(uploaded_files):
         if file:  # 如果文件存在
@@ -89,7 +89,7 @@ def upload_guide():
         cursor.close()
         connection.close()
 
-    return jsonify({}), 200
+    return redirect(url_for("guide_api.guide"))
 
 
 @guide_api.route("/<id>", methods=['PUT'])

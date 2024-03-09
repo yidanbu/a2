@@ -33,7 +33,7 @@
                 {% if user['role'] == 'admin' %}
                     <td>
                         <a class="btn btn-primary"
-                           href="{{ url_for('apiarist_api.apiarist_detail_page', id=apiarist['id']) }}"
+                           href="{{ url_for('apiarist_api.update_apiarist_page', id=apiarist['id']) }}"
                            role="button">Edit</a>
                         <button class="btn btn-danger apiarist-delete" value="{{ apiarist['id'] }}">Delete</button>
                     </td>

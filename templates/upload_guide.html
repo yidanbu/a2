@@ -1,54 +1,154 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Upload Disease Information</title>
-</head>
-<body>
-<h2>Upload Disease Information</h2>
-<form id="diseaseForm" method="post" enctype="multipart/form-data" action={{ url_for("guide_api.upload_guide") }}>
-    <label>Disease Type:
-        <input type="radio" name="type" value="pest"/>Pest
-        <input type="radio" name="type" value="disease"/>Disease
-    </label><br>
-    <label>Exists in NZ:
-        <input type="radio" name="exists_in_nz" value="true"/>Yes
-        <input type="radio" name="exists_in_nz" value="false"/>No
-    </label><br>
-    <label>Common Name: <input type="text" name="common_name"></label><br>
-    <label>Scientific Name: <input type="text" name="scientific_name"></label><br>
-    <label>Key Characteristics: <textarea name="key_characteristics"></textarea></label><br>
-    <label>Description: <textarea name="description"></textarea></label><br>
-    <label>Symptoms: <textarea name="symptoms"></textarea></label><br>
-    <label>Images: <input type="file" name="images[]" multiple onchange="updateImageList()"></label><br>
-    <div id="imageList"></div> <!-- 用于显示图片列表和单选按钮 -->
-    <button type="submit">Submit</button>
-</form>
-<script>
-    function updateImageList() {
-        const input = document.querySelector('input[type="file"]');
-        const imageList = document.getElementById('imageList');
-        imageList.innerHTML = ''; // 清空当前列表
+{% extends "base.html" %}
+{% block content %}
+    <form id="upload-guide-form" method="post" enctype="multipart/form-data" action="{{ url_for('guide_api.upload_guide') }}">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card shadow">
+                        <div class="card-header bg-primary text-white">
+                            Create Guide
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group">
+                                    Pest or Disease:
+                                    <input class="form-check-input" type="radio" name="type" id="type-pest"
+                                           value="pest" required>
+                                    <label class="form-check-label" for="type-pest">
+                                        Pest
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="type" id="type-disease"
+                                           value="disease">
+                                    <label class="form-check-label" for="type-disease">
+                                        Disease
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    Exists in NZ:
+                                    <input class="form-check-input" type="radio" name="exists_in_nz"
+                                           id="exists-in-nz-yes" value="yes" required>
+                                    <label class="form-check-label" for="exists-in-nz-yes">
+                                        Yes
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="exists_in_nz"
+                                           id="exists-in-nz-no"
+                                           value="no">
+                                    <label class="form-check-label" for="exists-in-nz-no">
+                                        No
+                                    </label>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="common-name" class="form-label">Common Name</label>
+                                    <input type="text" class="form-control" name="common_name" id="common-name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="scientific-name" class="form-label">Scientific Name</label>
+                                    <input type="text" class="form-control" name="scientific_name" id="scientific-name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="key-characteristics" class="form-label">Key Characteristics</label>
+                                    <textarea id="key-characteristics" name="key_characteristics" class="form-control"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea id="description" name="description" class="form-control"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="symptoms" class="form-label">Symptoms</label>
+                                    <textarea id="symptoms" name="symptoms" class="form-control"></textarea>
+                                </div>
+                                <label>Images: (Please select primary image before submit!)<input type="file" name="images[]" multiple onchange="updateImageList()" required></label><br>
+                                <div id="imageList"></div> <!-- 用于显示图片列表和单选按钮 -->
 
-        for (let i = 0; i < input.files.length; i++) {
-            const reader = new FileReader();
+                                <button type="submit" class="btn btn-primary">Create</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 
-            reader.onload = function (e) {
-                // 当文件被读取时，显示一个预览、文件名和单选按钮
-                imageList.innerHTML += `
+{#    <script src="/js/upload_guide.js"></script>#}
+    <script>
+        function updateImageList() {
+            const input = document.querySelector('input[type="file"]');
+            const imageList = document.getElementById('imageList');
+            imageList.innerHTML = ''; // 清空当前列表
+
+            for (let i = 0; i < input.files.length; i++) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    // 当文件被读取时，显示一个预览、文件名和单选按钮
+                    imageList.innerHTML += `
                         <div>
                             <label>
-                                <input type="radio" name="primary_image" value="${i}">
+                                <input type="radio" name="primary_image" value="${i}" required>
                                 <img src="${e.target.result}" alt="Image preview" style="width: 400px; height: auto;">
                             </label>
                             ${input.files[i].name}<br>
                         </div>
                     `;
-            };
+                };
 
-            reader.readAsDataURL(input.files[i]);
+                reader.readAsDataURL(input.files[i]);
+            }
         }
-    }
-</script>
-</body>
-</html>
+    </script>
+
+{% endblock %}
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>Upload Disease Information</title>#}
+{#</head>#}
+{#<body>#}
+{#<h2>Upload Disease Information</h2>#}
+{#<form id="diseaseForm" method="post" enctype="multipart/form-data" action={{ url_for("guide_api.upload_guide") }}>#}
+{#    <label>Disease Type:#}
+{#        <input type="radio" name="type" value="pest"/>Pest#}
+{#        <input type="radio" name="type" value="disease"/>Disease#}
+{#    </label><br>#}
+{#    <label>Exists in NZ:#}
+{#        <input type="radio" name="exists_in_nz" value="true"/>Yes#}
+{#        <input type="radio" name="exists_in_nz" value="false"/>No#}
+{#    </label><br>#}
+{#    <label>Common Name: <input type="text" name="common_name"></label><br>#}
+{#    <label>Scientific Name: <input type="text" name="scientific_name"></label><br>#}
+{#    <label>Key Characteristics: <textarea name="key_characteristics"></textarea></label><br>#}
+{#    <label>Description: <textarea name="description"></textarea></label><br>#}
+{#    <label>Symptoms: <textarea name="symptoms"></textarea></label><br>#}
+{#    <label>Images: <input type="file" name="images[]" multiple onchange="updateImageList()"></label><br>#}
+{#    <div id="imageList"></div> <!-- 用于显示图片列表和单选按钮 -->#}
+{#    <button type="submit">Submit</button>#}
+{#</form>#}
+{#<script>#}
+{#    function updateImageList() {#}
+{#        const input = document.querySelector('input[type="file"]');#}
+{#        const imageList = document.getElementById('imageList');#}
+{#        imageList.innerHTML = ''; // 清空当前列表#}
+{##}
+{#        for (let i = 0; i < input.files.length; i++) {#}
+{#            const reader = new FileReader();#}
+{##}
+{#            reader.onload = function (e) {#}
+{#                // 当文件被读取时，显示一个预览、文件名和单选按钮#}
+{#                imageList.innerHTML += `#}
+{#                        <div>#}
+{#                            <label>#}
+{#                                <input type="radio" name="primary_image" value="${i}">#}
+{#                                <img src="${e.target.result}" alt="Image preview" style="width: 400px; height: auto;">#}
+{#                            </label>#}
+{#                            ${input.files[i].name}<br>#}
+{#                        </div>#}
+{#                    `;#}
+{#            };#}
+{##}
+{#            reader.readAsDataURL(input.files[i]);#}
+{#        }#}
+{#    }#}
+{#</script>#}
+{#</body>#}
+{#</html>#}
