@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="container mt-5">
+        <h2>Dashboard</h2>
+        <h3>Guide Summary </h3>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Guides</h5>
+                        <p class="card-text">{{ type.values() | sum }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3>Summary by type</h3>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Disease</h5>
+                        <p class="card-text">{{ type['disease'] }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Pest</h5>
+                        <p class="card-text">{{ type['pest'] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h3>Summary by presence</h3>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Exists in NZ</h5>
+                        <p class="card-text">{{ exists_in_nz[1] }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="card text-white bg-warning mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Not in NZ</h5>
+                        <p class="card-text">{{ exists_in_nz[0] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% block content_staff %}{% endblock %}
+    </div>
+{% endblock %}

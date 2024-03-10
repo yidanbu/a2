@@ -17,7 +17,7 @@
         {% for guide in guide_list %}
             <tr>
                 <td>{{ guide["type"] }}</td>
-                <td>{{ guide["exists_in_nz"] }}</td>
+                <td>{{ "Yes" if guide["exists_in_nz"] else "No" }}</td>
                 <td>{{ guide["common_name"] }}</td>
                 <td><a href="{{ guide['guide_id'] }}"><img src="/uploads/{{ guide["filename"] }}"></a></td>
                 {% if user['role'] != 'apiarist' %}

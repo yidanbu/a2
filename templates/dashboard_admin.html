@@ -1,0 +1,23 @@
+{% extends "dashboard_staff.html" %}
+
+{% block content_admin %}
+    <h2>Staff</h2>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Staff Registered</h5>
+                    <p class="card-text">{{ staff_count }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Admin Registered</h5>
+                    <p class="card-text">{{ admin_count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -3,6 +3,7 @@ import os
 from flask import Flask, session, redirect, url_for, jsonify, render_template, request, Blueprint
 
 from api_apiarist import apiarist_api
+from api_dashboard import dashboard_api
 from api_guide import guide_api
 from api_profile import profile_api
 from api_register import register_api
@@ -20,18 +21,23 @@ app.register_blueprint(guide_api, url_prefix='/guide')
 app.register_blueprint(apiarist_api, url_prefix='/apiarist')
 app.register_blueprint(staff_api, url_prefix='/staff')
 app.register_blueprint(profile_api, url_prefix='/profile', static_url_path="/profile", static_folder="static")
+app.register_blueprint(dashboard_api, url_prefix='/dashboard')
 static_blueprint = Blueprint('static', __name__, static_url_path='/uploads', static_folder='uploads')
 app.register_blueprint(static_blueprint)
 
 # ensure upload folder exists
 os.makedirs(config.upload_folder, exist_ok=True)
-
+import werkzeug
 
 @app.route("/me")
 def me():
+    print(dict(session))
+    print(session)
+    print(type(session))
+    print(werkzeug.__version__)
     if 'username' not in session:
         return jsonify({"username": None}), 401
-    return jsonify(session), 200
+    return jsonify(dict(session)), 200
 
 
 @app.route('/login', methods=['POST'])

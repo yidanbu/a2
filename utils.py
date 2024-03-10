@@ -3,6 +3,8 @@ from functools import wraps
 import bcrypt
 from flask import session, abort
 
+def validate_password(password):
+    pass
 
 def hash_password(password):
     password_bytes = password.encode('utf-8')

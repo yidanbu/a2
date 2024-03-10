@@ -1,0 +1,16 @@
+{% extends "dashboard_apiarist.html" %}
+
+{% block content_staff %}
+    <h2>Apiarist Summary</h2>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Apiarists Registered</h5>
+                    <p class="card-text">{{ apiarists_count }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% block content_admin %}{% endblock %}
+{% endblock %}

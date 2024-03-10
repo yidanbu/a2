@@ -15,9 +15,11 @@
 <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
     <a class="navbar-brand" href="/">Bee Disease Home</a>
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('guide_api.guide') }}">Guide</a>
-        </li>
+        {% if user['role'] in ['apiarist', 'staff', 'admin'] %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('guide_api.guide') }}">Guide</a>
+            </li>
+        {% endif %}
         {% if user['role'] in ['staff', 'admin'] %}
             <li class="nav-item">
                 <a class="nav-link" href="/apiarist">Apiarists</a>
@@ -26,6 +28,11 @@
         {% if user['role'] in ['admin'] %}
             <li class="nav-item">
                 <a class="nav-link" href="/staff">Staff</a>
+            </li>
+        {% endif %}
+        {% if user['role'] in ['apiarist', 'staff', 'admin'] %}
+            <li class="nav-item">
+                <a class="nav-link" href="/dashboard">Dashboard</a>
             </li>
         {% endif %}
     </ul>
