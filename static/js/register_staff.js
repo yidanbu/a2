@@ -1,6 +1,7 @@
+import {checkPassword} from './util.js';
 // check register form validation
 document.getElementById('registerForm').addEventListener('submit', async function (event) {
-    event.preventDefault(); // 阻止表单提交
+    event.preventDefault();
     var username = document.getElementById('username').value;
     var password = document.getElementById('password').value;
     var confirmPassword = document.getElementById('confirmPassword').value;
@@ -15,6 +16,12 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     // check if the password and confirmPassword match
     if (password !== confirmPassword) {
         alert('Passwords do not match.');
+        return;
+    }
+
+    // check password meets requirements
+    if (checkPassword(password) !== true) {
+        alert('Password does not meet requirements. It must contains Upper and lower case letters, numbers and special characters @$!%*?& and be at least 8 characters long.');
         return;
     }
 
@@ -34,7 +41,6 @@ document.getElementById('registerForm').addEventListener('submit', async functio
             body: JSON.stringify(data)
         });
 
-        // 处理响应
         if (response.ok) {
         } else if (response.status === 409) {
             alert('username already exists');

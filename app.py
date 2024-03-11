@@ -15,21 +15,22 @@ app = Flask(__name__,
             static_url_path='',
             static_folder='static',
             template_folder='templates')
-app.secret_key = 'your_secret_key'
+
+# Register all blueprints
 app.register_blueprint(register_api)
 app.register_blueprint(guide_api, url_prefix='/guide')
 app.register_blueprint(apiarist_api, url_prefix='/apiarist')
 app.register_blueprint(staff_api, url_prefix='/staff')
 app.register_blueprint(profile_api, url_prefix='/profile', static_url_path="/profile", static_folder="static")
 app.register_blueprint(dashboard_api, url_prefix='/dashboard')
-static_blueprint = Blueprint('static', __name__, static_url_path='/uploads', static_folder='uploads')
+static_blueprint = Blueprint('static', __name__, static_url_path='/uploads', static_folder=config.upload_folder)
 app.register_blueprint(static_blueprint)
 
 # ensure upload folder exists
 os.makedirs(config.upload_folder, exist_ok=True)
-import werkzeug
 
 
+# API for get user basic info from session
 @app.route("/me")
 def me():
     if 'username' not in session:
@@ -37,6 +38,7 @@ def me():
     return jsonify(dict(session)), 200
 
 
+# API for login
 @app.route('/login', methods=['POST'])
 def login():
     username = request.json['username']
@@ -47,11 +49,13 @@ def login():
     # compare password
     if not check_password(result[0]['password'], password):
         return {"success": False}, 403
+    # add username and role info to session
     session['username'] = username
     session['role'] = result[0]['role']
     return {"success": True}, 200
 
 
+# home page
 @app.route('/')
 @app.route("/index")
 def index():

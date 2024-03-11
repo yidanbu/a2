@@ -1,3 +1,4 @@
+import { checkPassword } from './util.js';
 // check register form validation
 document.getElementById('registerForm').addEventListener('submit', async function (event) {
     event.preventDefault(); // 阻止表单提交
@@ -16,6 +17,13 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         return;
     }
 
+    // check password meets requirements
+    if (checkPassword(password) !== true) {
+        alert('Password does not meet requirements. It must contains Upper and lower case letters, numbers and special characters @$!%*?& and be at least 8 characters long.');
+        return;
+    }
+
+    // check email format
     if (!/\S+@\S+\.\S+/.test(email)) {
         alert('Invalid email format.');
         return;
@@ -34,7 +42,6 @@ document.getElementById('registerForm').addEventListener('submit', async functio
 
         if (response.ok) {
         } else if (response.status === 409) {
-            // 如果登录失败（即服务器返回的状态码不是200）
             alert('username already exists');
             return;
         }

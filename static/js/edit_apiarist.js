@@ -1,3 +1,4 @@
+// edit apiarist form listener. Read requests then sendto server
 document.getElementById('edit-apiarist-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     var id = document.getElementById('id').value

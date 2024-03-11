@@ -7,9 +7,11 @@ from werkzeug.utils import secure_filename
 from database import *
 from utils import role_required
 
+# Blueprint for guide API
 guide_api = Blueprint('guide_api', __name__)
 
 
+# Webpage for guide list
 @guide_api.route("/", methods=['GET'])
 @role_required('apiarist', 'staff', 'admin')
 def guide():
@@ -18,12 +20,14 @@ def guide():
     return render_template('guide.html', user=session, guide_list=results)
 
 
+# Webpage for guide upload
 @guide_api.route("/upload", methods=['GET'])
 @role_required('staff', 'admin')
 def upload_guide_page():
     return render_template('upload_guide.html', user=session)
 
 
+# Webpage for guide detail
 @guide_api.route("/<id>", methods=['GET'])
 def guide_detail_page(id):
     result = query("select * from guide where id=%s;", (id,))
@@ -35,6 +39,7 @@ def guide_detail_page(id):
     return render_template('edit_guide.html', user=session, guide=result[0], images=images)
 
 
+# API for delete guide
 @guide_api.route("/<id>", methods=['DELETE'])
 @role_required('staff', 'admin')
 def delete_guide(id):
@@ -43,6 +48,7 @@ def delete_guide(id):
     return jsonify({}), 200
 
 
+# API for upload a new guide
 @guide_api.route("/", methods=['POST'])
 @role_required('staff', 'admin')
 def upload_guide():
@@ -57,13 +63,15 @@ def upload_guide():
     }
     uploaded_files = request.files.getlist('images[]')
     filenames = []
+    # save images to file system
     for index, file in enumerate(uploaded_files):
         if file:
+            # make unique and secure filename
             filename = str(uuid.uuid4()) + secure_filename(file.filename)
             filenames.append(filename)
             file.save(os.path.join(config.upload_folder, filename))
 
-    # transactional database operation
+    # transactional database operation, ensure all or none
     connection, cursor = get_connection_and_cursor()
     try:
         cursor.execute(
@@ -87,6 +95,7 @@ def upload_guide():
     return redirect(url_for("guide_api.guide"))
 
 
+# API for updating guide basic info
 @guide_api.route("/<id>", methods=['PUT'])
 @role_required('staff', 'admin')
 def update_guide_basic_info(id):
@@ -95,6 +104,7 @@ def update_guide_basic_info(id):
     return jsonify({}), 200
 
 
+# API for updating guide image primary
 @guide_api.route("/<id>/image/<image_id>/primary", methods=['PUT'])
 @role_required('staff', 'admin')
 def guide_image_set_primary(id, image_id):
@@ -113,6 +123,7 @@ def guide_image_set_primary(id, image_id):
     return jsonify({}), 200
 
 
+# API for delete guide image
 @guide_api.route("/<id>/image/<image_id>", methods=['DELETE'])
 @role_required('staff', 'admin')
 def guide_image_delete(id, image_id):
@@ -126,6 +137,7 @@ def guide_image_delete(id, image_id):
     return jsonify({}), 200
 
 
+# API for upload guide image
 @guide_api.route("/<id>/image", methods=['POST'])
 @role_required('staff', 'admin')
 def guide_image_upload(id):

@@ -1,3 +1,4 @@
+// initialize user info from server
 document.addEventListener('DOMContentLoaded', function () {
     fetch('/me')
         .then(response => {
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => console.error('Error:', error));
 });
 
+// event listener for login button
 document.getElementById('login-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     var username = document.getElementById('login-username').value;

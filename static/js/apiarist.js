@@ -1,3 +1,4 @@
+// Create delete button and related function for apiarist
 document.addEventListener('DOMContentLoaded', function () {
     const buttons = document.querySelectorAll(".apiarist-delete");
     buttons.forEach(button => {

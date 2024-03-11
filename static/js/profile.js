@@ -1,3 +1,5 @@
+import { checkPassword } from './util.js';
+
 document.getElementById('editProfileForm').addEventListener('submit', async function (event) {
     event.preventDefault();
     var id = document.getElementById('id').value;
@@ -16,6 +18,13 @@ document.getElementById('editProfileForm').addEventListener('submit', async func
         return;
     }
 
+    // check password meets requirements
+    if (checkPassword(password) !== true) {
+        alert('Password does not meet requirements. It must contains Upper and lower case letters, numbers and special characters @$!%*?& and be at least 8 characters long.');
+        return;
+    }
+
+    // check email format
     if (!/\S+@\S+\.\S+/.test(email)) {
         alert('Invalid email format.');
         return;

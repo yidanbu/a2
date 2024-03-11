@@ -1,4 +1,4 @@
-
+// admin edit staff form listener. Read requests then sendto server
 document.getElementById('edit-staff-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     var id = document.getElementById('id').value

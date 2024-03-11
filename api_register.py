@@ -5,9 +5,11 @@ from flask import Blueprint, request, jsonify, render_template, session
 from database import *
 from utils import hash_password
 
+# Blueprint for register API
 register_api = Blueprint('register_api', __name__)
 
 
+# API for register
 @register_api.route("/register", methods=['POST'])
 def register():
     query(
@@ -28,6 +30,7 @@ def register():
     return jsonify({}), 200
 
 
+# Webpage for register
 @register_api.route("/register", methods=['GET'])
 def register_page():
     return render_template('register.html', user=session)

@@ -1,3 +1,4 @@
+// add delete button to each guide item
 document.addEventListener('DOMContentLoaded', function () {
     const buttons = document.querySelectorAll(".guide-delete");
     buttons.forEach(button => {

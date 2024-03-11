@@ -3,9 +3,11 @@ from flask import Blueprint, render_template, session, jsonify
 from database import query
 from utils import role_required
 
+# Blueprint for dashboard API
 dashboard_api = Blueprint('dashboard_api', __name__)
 
 
+# Webpage for dashboard entry. will triage to different dashboard based on user role
 @dashboard_api.route("/", methods=['GET'])
 @role_required('apiarist', 'staff', 'admin')
 def dashboard_page():
@@ -18,8 +20,7 @@ def dashboard_page():
 
 
 def dashboard_apiarist():
-    type_ = query("select type, count(*) from guide GROUP BY type;")
-    exists_in_nz = query("select exists_in_nz, count(*) from guide GROUP BY exists_in_nz;")
+    type_, exists_in_nz = get_basic_info()
     if not type_ or not exists_in_nz:
         return jsonify({"result": "query failed"}), 500
     type_ = {item['type']: item['count(*)'] for item in type_}
@@ -28,9 +29,8 @@ def dashboard_apiarist():
 
 
 def dashboard_staff():
-    type_ = query("select type, count(*) from guide GROUP BY type;")
-    exists_in_nz = query("select exists_in_nz, count(*) from guide GROUP BY exists_in_nz;")
-    user = query("select role, count(*) from user group by role;")
+    type_, exists_in_nz = get_basic_info()
+    user = get_user_info()
     if not type_ or not exists_in_nz or not user:
         return jsonify({"result": "query failed"}), 500
     type_ = {item['type']: item['count(*)'] for item in type_}
@@ -41,9 +41,8 @@ def dashboard_staff():
 
 
 def dashboard_admin():
-    type_ = query("select type, count(*) from guide GROUP BY type;")
-    exists_in_nz = query("select exists_in_nz, count(*) from guide GROUP BY exists_in_nz;")
-    user = query("select role, count(*) from user group by role;")
+    type_, exists_in_nz = get_basic_info()
+    user = get_user_info()
     if not type_ or not exists_in_nz or not user:
         return jsonify({"result": "query failed"}), 500
     type_ = {item['type']: item['count(*)'] for item in type_}
@@ -54,3 +53,14 @@ def dashboard_admin():
     admin_count = user['admin']
     return render_template('dashboard_admin.html', user=session, type=type_, exists_in_nz=exists_in_nz,
                            apiarists_count=apiarists_count, staff_count=staff_count, admin_count=admin_count)
+
+
+def get_basic_info():
+    type_ = query("select type, count(*) from guide GROUP BY type;")
+    exists_in_nz = query("select exists_in_nz, count(*) from guide GROUP BY exists_in_nz;")
+    return type_, exists_in_nz
+
+
+def get_user_info():
+    user = query("select role, count(*) from user group by role;")
+    return user

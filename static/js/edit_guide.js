@@ -1,3 +1,5 @@
+// add event listener to the edit guide form.
+// including set primary button and delete button for images
 document.addEventListener('DOMContentLoaded', function () {
     const buttons = document.querySelectorAll(".image-action");
     buttons.forEach(button => {
