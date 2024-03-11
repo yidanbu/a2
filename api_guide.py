@@ -15,7 +15,6 @@ guide_api = Blueprint('guide_api', __name__)
 def guide():
     # get all guides with primary image
     results = query("select * from guide, image where guide.id = image.guide_id and image.is_primary;")
-    print(results)
     return render_template('guide.html', user=session, guide_list=results)
 
 
@@ -56,13 +55,10 @@ def upload_guide():
         'description': request.form['description'],
         'symptoms': request.form['symptoms']
     }
-    print(request.form)  # 实际应用中应保存到数据库
-    # 图片文件
     uploaded_files = request.files.getlist('images[]')
-    print(uploaded_files)
     filenames = []
     for index, file in enumerate(uploaded_files):
-        if file:  # 如果文件存在
+        if file:
             filename = str(uuid.uuid4()) + secure_filename(file.filename)
             filenames.append(filename)
             file.save(os.path.join(config.upload_folder, filename))
@@ -83,7 +79,6 @@ def upload_guide():
         connection.commit()
     except Exception as e:
         connection.rollback()
-        print(e)
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
@@ -111,7 +106,6 @@ def guide_image_set_primary(id, image_id):
         connection.commit()
     except Exception as e:
         connection.rollback()
-        print(e)
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
@@ -138,7 +132,6 @@ def guide_image_upload(id):
     if 'image' not in request.files:
         return jsonify({'error': 'No file part'}), 400
     file = request.files['image']
-    # 如果用户没有选择文件，浏览器也会提交一个空的文件部分
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
     if file:

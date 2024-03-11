@@ -16,7 +16,6 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         return;
     }
 
-    // 简单的邮箱格式校验
     if (!/\S+@\S+\.\S+/.test(email)) {
         alert('Invalid email format.');
         return;
@@ -26,17 +25,14 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     var data = {username: username};
     try {
         const response = await fetch('/username/check', {
-            method: 'POST', // 或者 'GET' 如果你的后端是以查询字符串方式接收
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data) // 将JavaScript对象转换为JSON字符串
+            body: JSON.stringify(data)
         });
 
-        // 处理响应
         if (response.ok) {
-            // 如果登录成功（即服务器返回的状态码是200）
-            // 这里假设登录成功后服务器会重定向到主页
         } else if (response.status === 409) {
             // 如果登录失败（即服务器返回的状态码不是200）
             alert('username already exists');
@@ -49,7 +45,6 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     }
 
     // send register request
-    // 构建请求体
     var data = {
         username: username,
         password: password,
@@ -60,24 +55,19 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         phone: phone
     };
 
-    // 发送POST请求到Flask后端
     try {
         const response = await fetch('/register', {
-            method: 'POST', // 或者 'GET' 如果你的后端是以查询字符串方式接收
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data) // 将JavaScript对象转换为JSON字符串
+            body: JSON.stringify(data)
         });
 
-        // 处理响应
         if (response.ok) {
-            // 如果登录成功（即服务器返回的状态码是200）
-            // 这里假设登录成功后服务器会重定向到主页
             alert("register success")
-            window.location.href = document.referrer; // 重定向到主页
+            window.location.href = document.referrer;
         } else {
-            // 如果登录失败（即服务器返回的状态码不是200）
             alert('register failed. Please check your username and password.');
         }
     } catch (error) {

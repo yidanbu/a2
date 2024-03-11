@@ -16,11 +16,8 @@ def dashboard_page():
     else:
         return dashboard_admin()
 
+
 def dashboard_apiarist():
-    """
-    select type, count(*) from guide GROUP BY type;
-select exists_in_nz, count(*) from guide GROUP BY exists_in_nz;
-    """
     type_ = query("select type, count(*) from guide GROUP BY type;")
     exists_in_nz = query("select exists_in_nz, count(*) from guide GROUP BY exists_in_nz;")
     if not type_ or not exists_in_nz:
@@ -52,7 +49,6 @@ def dashboard_admin():
     type_ = {item['type']: item['count(*)'] for item in type_}
     exists_in_nz = {item['exists_in_nz']: item['count(*)'] for item in exists_in_nz}
     user = {item['role']: item['count(*)'] for item in user}
-    print(user)
     apiarists_count = user['apiarist']
     staff_count = user['staff']
     admin_count = user['admin']

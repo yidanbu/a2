@@ -29,12 +29,9 @@ app.register_blueprint(static_blueprint)
 os.makedirs(config.upload_folder, exist_ok=True)
 import werkzeug
 
+
 @app.route("/me")
 def me():
-    print(dict(session))
-    print(session)
-    print(type(session))
-    print(werkzeug.__version__)
     if 'username' not in session:
         return jsonify({"username": None}), 401
     return jsonify(dict(session)), 200
@@ -44,12 +41,10 @@ def me():
 def login():
     username = request.json['username']
     password = request.json['password']
-    print(username)
     result = query("select * from user where username=%s;", (username,))
     if not result:
         return {"success": False}, 403
     # compare password
-    print(result[0]['password'], password)
     if not check_password(result[0]['password'], password):
         return {"success": False}, 403
     session['username'] = username

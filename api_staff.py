@@ -13,7 +13,6 @@ staff_api = Blueprint('staff_api', __name__)
 def staff():
     # get all guides with primary image
     results = query("select * from user where role='staff' or role='admin';")
-    print(results)
     return render_template('staff.html', user=session, staff_list=results)
 
 
@@ -63,6 +62,5 @@ def update_guide_basic_info(id):
 @staff_api.route("/<id>", methods=['DELETE'])
 @role_required('admin')
 def delete_guide(id):
-    print(id)
     query("DELETE FROM user WHERE id=%s;", (id,))
     return jsonify({}), 200

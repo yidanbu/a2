@@ -38,7 +38,6 @@ def check_username_exists():
     username = request.json['username']
     # query database to check username exists
     result = query("SELECT * FROM user WHERE username = %s", (username,))
-    print(result)
     if result:
         return jsonify({"exists": "yes"}), 409
     return jsonify({"exists": "no"}), 200

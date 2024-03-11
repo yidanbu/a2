@@ -11,7 +11,6 @@ apiarist_api = Blueprint('apiarist_api', __name__)
 def apiarist():
     # get all guides with primary image
     results = query("select * from user where role='apiarist';")
-    print(results)
     return render_template('apiarist.html', user=session, apiarist_list=results)
 
 
@@ -39,6 +38,5 @@ def update_apiarist(id):
 @apiarist_api.route("/<id>", methods=['DELETE'])
 @role_required('admin')
 def delete_guide(id):
-    print(id)
     query("DELETE FROM user WHERE id=%s;", (id,))
     return jsonify({}), 200
