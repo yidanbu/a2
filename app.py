@@ -67,6 +67,10 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+@app.route('/reference')
+def reference():
+    return render_template('reference.html', user=session)
+
 
 if __name__ == "__main__":
     # app.run(host="0.0.0.0", port=8001, debug=False)
