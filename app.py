@@ -16,6 +16,7 @@ app = Flask(__name__,
             static_folder='static',
             template_folder='templates')
 
+app.secret_key = "app_key"
 # Register all blueprints
 app.register_blueprint(register_api)
 app.register_blueprint(guide_api, url_prefix='/guide')
